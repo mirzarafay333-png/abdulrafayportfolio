@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABDUL RAFAY's Portfolio</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for social icons and animated background icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Custom animations for a more dynamic feel */
@@ -26,26 +24,17 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-        /* New animation for navigation links */
         @keyframes navClick {
             0% { transform: scale(1); color: inherit; }
-            50% { transform: scale(1.1); color: #2dd4bf; }
+            50% { transform: scale(1.1); color: #f97316; }
             100% { transform: scale(1); color: inherit; }
         }
-        /* New animation for floating background icons */
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
-        }
-        /* Animation for the certificate and project cards */
         @keyframes popIn {
             0% { transform: scale(0.9) translateY(20px); opacity: 0; }
             100% { transform: scale(1) translateY(0); opacity: 1; }
         }
-        /* Animation for the skill bars to grow on load */
-        @keyframes growBar {
-            from { width: 0; }
+        @keyframes preloaderFadeOut {
+            to { opacity: 0; visibility: hidden; }
         }
 
         .animated-element {
@@ -70,40 +59,21 @@
         .animate-nav-click {
             animation: navClick 0.4s ease-in-out;
         }
-
-        /* Container for the floating icons */
-        .background-icons {
+        .preloader {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            overflow: hidden;
+            background: #1f2937;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
-
-        .background-icons .icon {
-            position: absolute;
-            display: block;
-            list-style: none;
-            width: 20px;
-            height: 20px;
-            background: rgba(45, 212, 191, 0.2); /* Semi-transparent cyan */
-            animation: float 25s linear infinite;
-            bottom: -150px;
-            border-radius: 50%;
+        .preloader.fade-out {
+            animation: preloaderFadeOut 0.5s ease-out 1s forwards;
         }
-
-        .background-icons .icon:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; animation-duration: 15s; }
-        .background-icons .icon:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 20s; }
-        .background-icons .icon:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; animation-duration: 30s; }
-        .background-icons .icon:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
-        .background-icons .icon:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; animation-duration: 16s; }
-        .background-icons .icon:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; animation-duration: 25s; }
-        .background-icons .icon:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; animation-duration: 35s; }
-        .background-icons .icon:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
-        .background-icons .icon:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
-        .background-icons .icon:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
 
         /* Styles for the hamburger icon transition */
         .mobile-menu-button-icon {
@@ -137,98 +107,42 @@
         .mobile-menu-button-icon.open span:nth-child(2) { opacity: 0; left: -60px; }
         .mobile-menu-button-icon.open span:nth-child(3) { top: 8px; transform: rotate(-135deg); }
 
-        /* Custom styles for the skill bar section */
-        .skill-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            background-color: #1f2937; /* A darker shade for the card */
-            border-radius: 0.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .skill-item:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-        }
-        .skill-info {
-            display: flex;
-            align-items: center;
+        /* Styles for the animated background canvas */
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-        }
-        .skill-info > h3 {
-            min-width: 150px; /* Adjust as needed */
-        }
-
-        .skill-bar-container {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-        }
-
-        .skill-bar {
-            background-color: #374151; /* Darker gray for the background of the bar */
-            height: 1rem;
-            flex-grow: 1;
-            border-radius: 9999px;
-            overflow: hidden;
-            position: relative;
-            margin-right: 1rem;
-        }
-
-        .skill-bar-fill {
             height: 100%;
-            background-color: #2dd4bf; /* Cyan for the fill */
-            /* Start with 0 width and animate it to the correct width using JS */
-            width: 0;
-            transition: width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth animation */
+            z-index: -1;
         }
-
-        .skill-percentage {
-            color: #2dd4bf;
-            font-weight: bold;
-            font-size: 0.875rem; /* text-sm */
-            min-width: 40px; /* Fixed width to prevent layout shifts */
-            text-align: right;
-        }
-        
     </style>
-    <!-- Use Inter font family -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="bg-slate-950 text-gray-300 font-inter relative">
+<body class="bg-slate-900 text-gray-300 font-inter">
 
-    <!-- Background Icons Animation -->
-    <div class="background-icons">
-        <span class="icon"></span>
-        <span class="icon"></span>
-        <span class="icon"></span>
-        <span class="icon"></span>
-        <span class="icon"></span>
-        <span class="icon"></span>
-        <span class="icon"></span>
-        <span class="icon"></span>
-        <span class="icon"></span>
-        <span class="icon"></span>
+    <!-- Animated Background Canvas -->
+    <canvas id="background-canvas"></canvas>
+
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="animate-spin rounded-full h-32 w-32 border-b-4 border-orange-500"></div>
     </div>
 
-    <!-- Header & Navigation -->
+    <!-- Header and Navigation -->
     <header class="bg-slate-900/80 sticky top-0 z-50 shadow-lg backdrop-blur-sm">
         <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="#hero" class="text-2xl font-bold text-cyan-400">ABDUL RAFAY</a>
+            <a href="#hero" class="text-2xl font-bold text-orange-500">ABDUL RAFAY</a>
             <div class="hidden md:flex space-x-6">
-                <a href="#about" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">About</a>
-                <a href="#education" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Education</a>
-                <a href="#skills" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Skills</a>
-                <a href="#certificates" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Certificates</a>
-                <a href="#projects" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Projects</a>
-                <a href="#contact" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Contact</a>
+                <a href="#about" class="text-gray-300 hover:text-orange-500 transition-colors duration-300 nav-link">About</a>
+                <a href="#experience" class="text-gray-300 hover:text-orange-500 transition-colors duration-300 nav-link">Experience</a>
+                <a href="#skills" class="text-gray-300 hover:text-orange-500 transition-colors duration-300 nav-link">Skills</a>
+                <a href="#projects" class="text-gray-300 hover:text-orange-500 transition-colors duration-300 nav-link">Projects</a>
+                <a href="#contact" class="text-gray-300 hover:text-orange-500 transition-colors duration-300 nav-link">Contact</a>
             </div>
-            <!-- Mobile Menu Button -->
+            <!-- Mobile menu button -->
             <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
                 <div class="mobile-menu-button-icon">
                     <span></span>
@@ -237,392 +151,362 @@
                 </div>
             </button>
         </nav>
-        <!-- Mobile Menu -->
+        <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-slate-900/80 pb-4">
-            <a href="#about" class="block px-4 py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300">About</a>
-            <a href="#education" class="block px-4 py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300">Education</a>
-            <a href="#skills" class="block px-4 py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300">Skills</a>
-            <a href="#certificates" class="block px-4 py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300">Certificates</a>
-            <a href="#projects" class="block px-4 py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300">Contact</a>
+            <a href="#about" class="block px-4 py-2 text-gray-300 hover:text-orange-500 transition-colors duration-300 nav-link-mobile">About</a>
+            <a href="#experience" class="block px-4 py-2 text-gray-300 hover:text-orange-500 transition-colors duration-300 nav-link-mobile">Experience</a>
+            <a href="#skills" class="block px-4 py-2 text-gray-300 hover:text-orange-500 transition-colors duration-300 nav-link-mobile">Skills</a>
+            <a href="#projects" class="block px-4 py-2 text-gray-300 hover:text-orange-500 transition-colors duration-300 nav-link-mobile">Projects</a>
+            <a href="#contact" class="block px-4 py-2 text-gray-300 hover:text-orange-500 transition-colors duration-300 nav-link-mobile">Contact</a>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Hero Section -->
-        <section id="hero" class="min-h-screen flex items-center justify-center text-center px-4 md:flex-row md:justify-around md:text-left">
-            <div class="space-y-6 animated-element" data-animation="slide-in-left">
-                <h1 class="text-5xl md:text-7xl font-extrabold text-cyan-400 leading-tight">Hello, I'm ABDUL RAFAY</h1>
-                <p class="text-xl md:text-3xl text-gray-400">A passionate mobile and web developer creating engaging digital experiences.</p>
-                <a href="#projects" class="inline-block bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out">
-                    View My Work
-                </a>
-            </div>
-            <div class="mt-12 md:mt-0 hero-img-container animated-element" data-animation="slide-in-right">
-                <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-xl border-4 border-cyan-600 flex-shrink-0">
-                    <!-- IMPORTANT: The image file name must include its extension, such as .jpg, .png, or .webp. -->
-                    <!-- Ensure this file is located in the same directory as this HTML file. -->
-                    <img src="profile.jpg" alt="ABDUL RAFAY's Portrait">
-                </div>
-            </div>
-        </section>
+    <main class="max-w-6xl mx-auto p-4 md:p-8">
+        <!-- Main content wrapper with a card-like style -->
+        <div class="bg-gray-800/80 rounded-3xl p-4 md:p-12 shadow-2xl">
 
-        <!-- About Me Section -->
-        <section id="about" class="py-20 md:py-32 bg-slate-900/50 px-4 rounded-3xl mx-4 md:mx-10 my-10">
-            <div class="container mx-auto">
-                <h2 class="text-4xl font-bold text-center mb-12 text-white animated-element" data-animation="fade-in">About Me</h2>
-                <div class="flex justify-center">
-                    <div class="text-gray-400 text-lg space-y-4 max-w-4xl animated-element" data-animation="fade-in">
-                        <p>
-                            Hello! I'm ABDUL RAFAY, a mobile and web developer. I am good in Python, PHP, HTML, NodeJS, JavaScript, Java, and CSS. I am a UI/UX designer and a full-stack developer, proficient in both frontend and backend development. I am passionate about solving complex problems with creative and efficient solutions.
-                        </p>
+            <!-- Hero Section -->
+            <section id="hero" class="min-h-[80vh] flex flex-col md:flex-row items-center justify-center text-center md:text-left md:justify-around p-4 md:p-12">
+                <div class="space-y-6 animated-element" data-animation="slide-in-left">
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-orange-500 leading-tight">Hello. <br> I'm Abdul Rafay</h1>
+                    <p class="text-xl md:text-3xl text-gray-400">Mobile & Web Developer</p>
+                    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mt-6">
+                        <a href="#projects" class="inline-block bg-orange-600 hover:bg-orange-500 text-white font-bold py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out">
+                            Got a project?
+                        </a>
                     </div>
                 </div>
-            </div>
-        </section>
+                <div class="mt-12 md:mt-0 hero-img-container animated-element" data-animation="slide-in-right">
+                    <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-xl border-4 border-orange-600 flex-shrink-0">
+                         <!-- Using a placeholder for the user's profile image -->
+                        <img src="profile.jpg" alt="ABDUL RAFAY's Portrait" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section and Services -->
+            <section id="about" class="py-12 md:py-20 p-4 md:p-12">
+                <h2 class="text-4xl font-bold text-center mb-12 text-white animated-element" data-animation="fade-in">About me</h2>
+                <div class="flex flex-col lg:flex-row justify-between items-start gap-8">
+                    <!-- Services on the left -->
+                    <div class="flex-1 w-full lg:w-1/3 space-y-8 animated-element" data-animation="slide-in-left">
+                        <div class="bg-gray-700/50 rounded-lg p-6 flex items-center space-x-4">
+                            <i class="fas fa-laptop-code text-orange-500 text-3xl"></i>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">Website Development</h3>
+                                <p class="text-gray-400">Crafting responsive, and functional websites for your business needs.</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-700/50 rounded-lg p-6 flex items-center space-x-4">
+                            <i class="fas fa-mobile-alt text-orange-500 text-3xl"></i>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">App Development</h3>
+                                <p class="text-gray-400">Building intuitive and feature-rich mobile applications.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About me text and stats on the right -->
+                    <div class="flex-1 w-full lg:w-2/3 space-y-6 animated-element" data-animation="slide-in-right">
+                        <div class="text-gray-400 text-lg space-y-4 max-w-4xl">
+                            <p>
+                                
+                            </p>
+                            <p>
+                                Hello! I'm ABDUL RAFAY, a mobile and web developer. I am good in Python, PHP, HTML, NodeJS, JavaScript, Java, and CSS. I am a UI/UX designer and a full-stack developer, proficient in both frontend and backend development. I am passionate about solving complex problems with creative and efficient solutions.
+                            </p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row justify-between items-center text-center sm:text-left mt-8">
+                            <div class="p-4">
+                                <h3 class="text-4xl font-bold text-orange-500">5+</h3>
+                                <p class="text-gray-400">Completed Projects</p>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-4xl font-bold text-orange-500">95%</h3>
+                                <p class="text-gray-400">Client satisfaction</p>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-4xl font-bold text-orange-500">1+</h3>
+                                <p class="text-gray-400">Month of experience</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         
-        <!-- Education Section -->
-        <section id="education" class="py-20 md:py-32 bg-slate-900/50 px-4 rounded-3xl mx-4 md:mx-10 my-10">
-            <div class="container mx-auto">
+            <!-- Experience Section -->
+            <section id="experience" class="py-12 md:py-20 p-4 md:p-12">
+                <h2 class="text-4xl font-bold text-center mb-12 text-white animated-element" data-animation="fade-in">Experience</h2>
+                <div class="space-y-8 relative">
+                    <!-- Vertical line for timeline effect -->
+                    <div class="absolute left-6 md:left-1/2 w-1 bg-gray-700 h-full transform -translate-x-1/2"></div>
+
+                    <!-- Experience Item 1 (The only one) -->
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center animated-element" data-animation="fade-in">
+                        <div class="w-full md:w-1/2 md:pr-12 md:text-right relative mb-4 md:mb-0">
+                            <div class="absolute w-4 h-4 bg-orange-600 rounded-full top-2 right-[-28px] md:left-auto md:right-[-20px] transform md:-translate-x-1/2 md:translate-y-0"></div>
+                            <h3 class="text-2xl font-semibold text-white">Web and Mobile Application Developer</h3>
+                            <p class="text-lg text-gray-400">Codevate | 2025 - Present</p>
+                            <p class="text-gray-400 mt-2">Doing projects on different applications and website developing by using full-stack approach.</p>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Education Section -->
+            <section id="education" class="py-12 md:py-20 p-4 md:p-12">
                 <h2 class="text-4xl font-bold text-center mb-12 text-white animated-element" data-animation="fade-in">Education</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Education Card: University -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <div class="border-l-4 border-cyan-600 pl-6 p-6">
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <div class="border-l-4 border-orange-600 pl-6 p-6">
                             <p class="text-xl font-semibold">National University of Modern Languages</p>
-                            <p class="text-lg text-gray-400">Currently studying</p>
+                            <p class="text-lg text-gray-400">Doing(BSCS)Currently studying</p>
                         </div>
                     </div>
-                    <!-- Education Card: College -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <div class="border-l-4 border-cyan-600 pl-6 p-6">
-                            <p class="text-xl font-semibold">Milestone College Harley Street</p>
-                            <p class="text-lg text-gray-400">FSC</p>
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <div class="border-l-4 border-orange-600 pl-6 p-6">
+                            <p class="text-xl font-semibold">Milestone College Harley Street Rwp</p>
+                            <p class="text-lg text-gray-400">FSC 1st Div(2022)</p>
                         </div>
                     </div>
-                    <!-- Education Card: School -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <div class="border-l-4 border-cyan-600 pl-6 p-6">
-                            <p class="text-xl font-semibold">Army Public School and College</p>
-                            <p class="text-lg text-gray-400">Matric</p>
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <div class="border-l-4 border-orange-600 pl-6 p-6">
+                            <p class="text-xl font-semibold">Army Public School and College Rwp</p>
+                            <p class="text-lg text-gray-400">Matric 1st Div(2019)</p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Skills Section -->
-        <section id="skills" class="py-20 md:py-32 bg-slate-900/50 px-4 rounded-3xl mx-4 md:mx-10 my-10">
-            <div class="container mx-auto">
+            <!-- Skills Section (Updated to a simple list) -->
+            <section id="skills" class="py-12 md:py-20 p-4 md:p-12">
                 <h2 class="text-4xl font-bold text-center mb-12 text-white animated-element" data-animation="fade-in">Skills</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto animated-element" data-animation="fade-in">
-                    <!-- Skill Item: Python -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">Python</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="90%"></div>
-                            </div>
-                            <span class="skill-percentage">90%</span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <div class="bg-gray-700/50 p-6 rounded-lg shadow-xl animated-element" data-animation="pop-in">
+                        <h3 class="text-2xl font-bold text-white mb-4">Frontend Development</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500">HTML</span>
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500">CSS</span>
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500">JavaScript</span>
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500">React JS</span>
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500"> CSS</span>
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500">Flutter</span>
                         </div>
                     </div>
-                    <!-- Skill Item: PHP -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">PHP</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="80%"></div>
-                            </div>
-                            <span class="skill-percentage">80%</span>
-                        </div>
-                    </div>
-                    <!-- Skill Item: HTML -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">HTML</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="95%"></div>
-                            </div>
-                            <span class="skill-percentage">95%</span>
-                        </div>
-                    </div>
-                    <!-- Skill Item: NodeJS -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">NodeJS</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="75%"></div>
-                            </div>
-                            <span class="skill-percentage">75%</span>
-                        </div>
-                    </div>
-                    <!-- Skill Item: JavaScript -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">JavaScript</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="90%"></div>
-                            </div>
-                            <span class="skill-percentage">90%</span>
-                        </div>
-                    </div>
-                    <!-- Skill Item: Java -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">Java</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="70%"></div>
-                            </div>
-                            <span class="skill-percentage">70%</span>
-                        </div>
-                    </div>
-                    <!-- Skill Item: CSS -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">CSS</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="85%"></div>
-                            </div>
-                            <span class="skill-percentage">85%</span>
-                        </div>
-                    </div>
-                    <!-- Skill Item: React JS -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">React JS</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="80%"></div>
-                            </div>
-                            <span class="skill-percentage">80%</span>
-                        </div>
-                    </div>
-                    <!-- Skill Item: React Native -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">React Native</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="70%"></div>
-                            </div>
-                            <span class="skill-percentage">70%</span>
-                        </div>
-                    </div>
-                    <!-- Skill Item: UI UX Designer -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">UI UX Designer</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="85%"></div>
-                            </div>
-                            <span class="skill-percentage">85%</span>
-                        </div>
-                    </div>
-                    <!-- Skill Item: Figma -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">Figma</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="75%"></div>
-                            </div>
-                            <span class="skill-percentage">75%</span>
-                        </div>
-                    </div>
-                    <!-- Skill Item: Frontend Developer -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">Frontend Developer</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="90%"></div>
-                            </div>
-                            <span class="skill-percentage">90%</span>
-                        </div>
-                    </div>
-                    <!-- Skill Item: Backend Developer -->
-                    <div class="skill-item">
-                        <h3 class="text-lg font-semibold text-cyan-400">Backend Developer</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-skill-width="85%"></div>
-                            </div>
-                            <span class="skill-percentage">85%</span>
+                    <div class="bg-gray-700/50 p-6 rounded-lg shadow-xl animated-element" data-animation="pop-in">
+                        <h3 class="text-2xl font-bold text-white mb-4">Backend Development</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500">NodeJS</span>
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500">PHP</span>
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500">Python</span>
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500">Java</span>
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500">Firebase</span>
+                            <span class="bg-gray-900 text-orange-400 px-4 py-2 rounded-full border border-orange-500">SQL</span>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Certificates Section -->
-        <section id="certificates" class="py-20 md:py-32 bg-slate-900/50 px-4 rounded-3xl mx-4 md:mx-10 my-10">
-            <div class="container mx-auto">
+            <!-- Certificates Section -->
+            <section id="certificates" class="py-12 md:py-20 p-4 md:p-12">
                 <h2 class="text-4xl font-bold text-center mb-12 text-white animated-element" data-animation="fade-in">Certificates</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Certificate Card: Python -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <img src="https://placehold.co/600x400/2dd4bf/1f2937?text=Python+Certificate" alt="Python Certificate" class="w-full h-48 object-cover border-b-2 border-cyan-500">
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <img src="https://placehold.co/600x400/f97316/1f2937?text=Web+Certificate" alt="Mobie and web development Certificate" class="w-full h-48 object-cover border-b-2 border-orange-500" onerror="this.onerror=null;this.src='https://placehold.co/600x400/f97316/1f2937?text=Python+Certificate';">
                         <div class="p-6">
-                            <h3 class="text-2xl font-semibold mb-2 text-cyan-400">Python</h3>
+                            <h3 class="text-2xl font-semibold mb-2 text-orange-500">Mobile and web development</h3>
+                            <p class="text-gray-400">Issued by: NUML</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <img src="https://placehold.co/600x400/f97316/1f2937?text=PHP+Certificate" alt="PHP Certificate" class="w-full h-48 object-cover border-b-2 border-orange-500" onerror="this.onerror=null;this.src='https://placehold.co/600x400/f97316/1f2937?text=PHP+Certificate';">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold mb-2 text-orange-500">PHP</h3>
                             <p class="text-gray-400">Issued by: Microsoft</p>
                         </div>
                     </div>
-                    <!-- Certificate Card: PHP -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <img src="https://placehold.co/600x400/2dd4bf/1f2937?text=PHP+Certificate" alt="PHP Certificate" class="w-full h-48 object-cover border-b-2 border-cyan-500">
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <img src="https://placehold.co/600x400/f97316/1f2937?text=HTML+Certificate" alt="HTML Certificate" class="w-full h-48 object-cover border-b-2 border-orange-500" onerror="this.onerror=null;this.src='https://placehold.co/600x400/f97316/1f2937?text=HTML+Certificate';">
                         <div class="p-6">
-                            <h3 class="text-2xl font-semibold mb-2 text-cyan-400">PHP</h3>
-                            <p class="text-gray-400">Issued by: Microsoft</p>
-                        </div>
-                    </div>
-                    <!-- Certificate Card: HTML -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <img src="https://placehold.co/600x400/2dd4bf/1f2937?text=HTML+Certificate" alt="HTML Certificate" class="w-full h-48 object-cover border-b-2 border-cyan-500">
-                        <div class="p-6">
-                            <h3 class="text-2xl font-semibold mb-2 text-cyan-400">HTML</h3>
+                            <h3 class="text-2xl font-semibold mb-2 text-orange-500">HTML</h3>
                             <p class="text-gray-400">Issued by: EDX</p>
                         </div>
                     </div>
-                    <!-- Certificate Card: Node.js -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <img src="https://placehold.co/600x400/2dd4bf/1f2937?text=Node.js+Certificate" alt="Node.js Certificate" class="w-full h-48 object-cover border-b-2 border-cyan-500">
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <img src="https://placehold.co/600x400/f97316/1f2937?text=Node.js+Certificate" alt="Node.js Certificate" class="w-full h-48 object-cover border-b-2 border-orange-500" onerror="this.onerror=null;this.src='https://placehold.co/600x400/f97316/1f2937?text=Node.js+Certificate';">
                         <div class="p-6">
-                            <h3 class="text-2xl font-semibold mb-2 text-cyan-400">Node JS</h3>
+                            <h3 class="text-2xl font-semibold mb-2 text-orange-500">Node JS</h3>
                             <p class="text-gray-400">Issued by: Google</p>
                         </div>
                     </div>
-                    <!-- Certificate Card: JavaScript -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <img src="https://placehold.co/600x400/2dd4bf/1f2937?text=JavaScript+Certificate" alt="JavaScript Certificate" class="w-full h-48 object-cover border-b-2 border-cyan-500">
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <img src="https://placehold.co/600x400/f97316/1f2937?text=JavaScript+Certificate" alt="JavaScript Certificate" class="w-full h-48 object-cover border-b-2 border-orange-500" onerror="this.onerror=null;this.src='https://placehold.co/600x400/f97316/1f2937?text=JavaScript+Certificate';">
                         <div class="p-6">
-                            <h3 class="text-2xl font-semibold mb-2 text-cyan-400">JavaScript</h3>
-                            <p class="text-gray-400">Issued by: Udemy</p>
+                            <h3 class="text-2xl font-semibold mb-2 text-orange-500">JavaScript</h3>
+                            <p class="text-gray-400">Issued by: Coursera</p>
                         </div>
                     </div>
-                    <!-- Certificate Card: React JS -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <img src="https://placehold.co/600x400/2dd4bf/1f2937?text=React+JS+Certificate" alt="React JS Certificate" class="w-full h-48 object-cover border-b-2 border-cyan-500">
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <img src="https://placehold.co/600x400/f97316/1f2937?text=React+JS+Certificate" alt="React JS Certificate" class="w-full h-48 object-cover border-b-2 border-orange-500" onerror="this.onerror=null;this.src='https://placehold.co/600x400/f97316/1f2937?text=React+JS+Certificate';">
                         <div class="p-6">
-                            <h3 class="text-2xl font-semibold mb-2 text-cyan-400">React JS</h3>
+                            <h3 class="text-2xl font-semibold mb-2 text-orange-500">React JS</h3>
                             <p class="text-gray-400">Issued by: IBM</p>
                         </div>
                     </div>
-                    <!-- Certificate Card: UI UX -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <img src="https://placehold.co/600x400/2dd4bf/1f2937?text=UI+UX+Certificate" alt="UI UX Certificate" class="w-full h-48 object-cover border-b-2 border-cyan-500">
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <img src="https://placehold.co/600x400/f97316/1f2937?text=UI+UX+Certificate" alt="UI UX Certificate" class="w-full h-48 object-cover border-b-2 border-orange-500" onerror="this.onerror=null;this.src='https://placehold.co/600x400/f97316/1f2937?text=UI+UX+Certificate';">
                         <div class="p-6">
-                            <h3 class="text-2xl font-semibold mb-2 text-cyan-400">UI UX</h3>
+                            <h3 class="text-2xl font-semibold mb-2 text-orange-500">UI UX</h3>
                             <p class="text-gray-400">Issued by: Skill Share</p>
                         </div>
                     </div>
-                    <!-- Certificate Card: CSS -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <img src="https://placehold.co/600x400/2dd4bf/1f2937?text=CSS+Certificate" alt="CSS Certificate" class="w-full h-48 object-cover border-b-2 border-cyan-500">
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <img src="https://placehold.co/600x400/f97316/1f2937?text=CSS+Certificate" alt="CSS Certificate" class="w-full h-48 object-cover border-b-2 border-orange-500" onerror="this.onerror=null;this.src='https://placehold.co/600x400/f97316/1f2937?text=CSS+Certificate';">
                         <div class="p-6">
-                            <h3 class="text-2xl font-semibold mb-2 text-cyan-400">CSS</h3>
+                            <h3 class="text-2xl font-semibold mb-2 text-orange-500">CSS</h3>
                             <p class="text-gray-400">Issued by: Meta</p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Projects Section -->
-        <section id="projects" class="py-20 md:py-32 bg-slate-900/50 px-4 rounded-3xl mx-4 md:mx-10 my-10">
-            <div class="container mx-auto">
+            <!-- Projects Section -->
+            <section id="projects" class="py-12 md:py-20 p-4 md:p-12">
                 <h2 class="text-4xl font-bold text-center mb-12 text-white animated-element" data-animation="fade-in">My Projects</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Project Card: Portfolio Website (Kept this one) -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <img src="https://placehold.co/600x400/1f2937/ffffff?text=Portfolio+Website" alt="Portfolio Website" class="w-full h-48 object-cover">
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <img src="https://placehold.co/600x400/1f2937/f97316?text=Portfolio+Website" alt="Portfolio Website" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1f2937/f97316?text=Portfolio+Website';">
                         <div class="p-6">
-                            <h3 class="text-2xl font-semibold mb-2 text-cyan-400">Portfolio Website</h3>
+                            <h3 class="text-2xl font-semibold mb-2 text-orange-500">Portfolio Website</h3>
                             <p class="text-gray-400">My personal portfolio created with HTML, CSS, and JavaScript.</p>
-                            <a href="#" class="mt-4 inline-block text-cyan-600 hover:text-cyan-500 font-bold">Learn More &rarr;</a>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <span class="text-xs font-semibold inline-block py-1 px-3 uppercase rounded-full text-white bg-orange-600/50">HTML</span>
+                                <span class="text-xs font-semibold inline-block py-1 px-3 uppercase rounded-full text-white bg-orange-600/50">CSS</span>
+                                <span class="text-xs font-semibold inline-block py-1 px-3 uppercase rounded-full text-white bg-orange-600/50">JavaScript</span>
+                            </div>
+                            <div class="flex space-x-4 mt-6">
+                                <a href="https://mirzarafay333-png.github.io/abdulrafayportfolio/" class="inline-flex items-center text-orange-500 hover:text-orange-400 font-bold transition-colors duration-300">View Project <i class="fas fa-external-link-alt ml-2"></i></a>
+                            </div>
                         </div>
                     </div>
-                    <!-- Project Card: Ncsr Website -->
-                    <div class="bg-gray-800/80 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
-                        <img src="https://placehold.co/600x400/1f2937/ffffff?text=Ncsr+Website" alt="Ncsr Website" class="w-full h-48 object-cover">
+                    <div class="bg-gray-700/50 rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl animated-element" data-animation="pop-in">
+                        <img src="https://placehold.co/600x400/1f2937/f97316?text=Ncsr+Website" alt="Ncsr Website" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1f2937/f97316?text=Ncsr+Website';">
                         <div class="p-6">
-                            <h3 class="text-2xl font-semibold mb-2 text-cyan-400">Ncsr website</h3>
+                            <h3 class="text-2xl font-semibold mb-2 text-orange-500">Ncsr website</h3>
                             <p class="text-gray-400">A web project developed using Flutter, JavaScript, HTML, and CSS.</p>
-                            <a href="#" class="mt-4 inline-block text-cyan-600 hover:text-cyan-500 font-bold">Learn More &rarr;</a>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <span class="text-xs font-semibold inline-block py-1 px-3 uppercase rounded-full text-white bg-orange-600/50">Flutter</span>
+                                <span class="text-xs font-semibold inline-block py-1 px-3 uppercase rounded-full text-white bg-orange-600/50">JavaScript</span>
+                                <span class="text-xs font-semibold inline-block py-1 px-3 uppercase rounded-full text-white bg-orange-600/50">HTML</span>
+                                <span class="text-xs font-semibold inline-block py-1 px-3 uppercase rounded-full text-white bg-orange-600/50">CSS</span>
+                            </div>
+                            <div class="flex space-x-4 mt-6">
+                                <a href="https://mirzarafay333-png.github.io/ncsrrawal/" class="inline-flex items-center text-orange-500 hover:text-orange-400 font-bold transition-colors duration-300">View Project <i class="fas fa-external-link-alt ml-2"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="py-20 md:py-32 bg-slate-900/50 px-4 rounded-3xl mx-4 md:mx-10 my-10">
-            <div class="container mx-auto text-center animated-element" data-animation="fade-in">
-                <h2 class="text-4xl font-bold mb-8 text-white">Get In Touch</h2>
-                <p class="text-lg text-gray-400 mb-2">
-                    I'm currently open to new opportunities. Feel free to reach out!
-                </p>
-                <!-- Added explicit email and phone number -->
-                <div class="space-y-4 md:space-y-0 md:flex justify-center md:space-x-8 mt-6">
-                    <a href="mailto:mirzarafay333@gmail.com" class="text-lg font-semibold text-cyan-400 hover:text-cyan-500 transition-colors duration-300">
-                        <i class="fas fa-envelope mr-2"></i>mirzarafay333@gmail.com
-                    </a>
-                    <a href="tel:+03326499910" class="text-lg font-semibold text-cyan-400 hover:text-cyan-500 transition-colors duration-300">
-                        <i class="fas fa-phone mr-2"></i>+03326499910
-                    </a>
+            <!-- Testimonials Section -->
+            <section id="testimonials" class="py-12 md:py-20 p-4 md:p-12">
+                <h2 class="text-4xl font-bold text-center mb-12 text-white animated-element" data-animation="fade-in">What Clients Say</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-gray-700/50 rounded-lg p-8 shadow-xl animated-element" data-animation="pop-in">
+                        <div class="flex items-center mb-4">
+                            <img src="https://placehold.co/80x80/f97316/1f2937?text=C1" alt="Client 1" class="rounded-full w-16 h-16 mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/f97316/1f2937?text=C1';">
+                            <div>
+                                <p class="text-xl font-bold text-white">Alex</p>
+                                <p class="text-gray-400">CEO, codevate Corp</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 italic">"Abdul Rafay delivered a fantastic website that exceeded our expectations. He was professional, responsive, and the quality of his work is outstanding."</p>
+                    </div>
+                    <div class="bg-gray-700/50 rounded-lg p-8 shadow-xl animated-element" data-animation="pop-in">
+                        <div class="flex items-center mb-4">
+                            <img src="https://placehold.co/80x80/f97316/1f2937?text=C2" alt="Client 2" class="rounded-full w-16 h-16 mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/f97316/1f2937?text=C2';">
+                            <div>
+                                <p class="text-xl font-bold text-white"> Smith</p>
+                                <p class="text-gray-400">Founder, Comtanix</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 italic">"Working with Abdul Rafay was a pleasure. His attention to detail and ability to bring our vision to life was remarkable. Highly recommended!"</p>
+                    </div>
                 </div>
+            </section>
 
-                <div class="mt-8 space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors duration-300 text-xl"><i class="fab fa-github"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors duration-300 text-xl"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors duration-300 text-xl"><i class="fab fa-twitter"></i></a>
+            <!-- Contact Section -->
+            <section id="contact" class="py-12 md:py-20 p-4 md:p-12">
+                <h2 class="text-4xl font-bold text-center mb-12 text-white animated-element" data-animation="fade-in">Get In Touch</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 animated-element" data-animation="fade-in">
+                    <!-- Left side with text -->
+                    <div class="text-center md:text-left space-y-4">
+                        <h3 class="text-3xl md:text-4xl font-extrabold text-white">Have a project? <br> Let's talk!</h3>
+                    </div>
+                    <!-- Right side with form -->
+                    <div class="bg-gray-700/50 rounded-lg p-8 shadow-xl">
+                        <form class="space-y-4">
+                            <div>
+                                <label for="name" class="sr-only">Name</label>
+                                <input type="text" id="name" name="name" placeholder="Name" class="w-full bg-gray-900 border border-gray-600 rounded-md py-3 px-4 text-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors duration-300">
+                            </div>
+                            <div>
+                                <label for="email" class="sr-only">Email</label>
+                                <input type="email" id="email" name="email" placeholder="Email" class="w-full bg-gray-900 border border-gray-600 rounded-md py-3 px-4 text-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors duration-300">
+                            </div>
+                            <div>
+                                <label for="message" class="sr-only">Message</label>
+                                <textarea id="message" name="message" rows="4" placeholder="Message" class="w-full bg-gray-900 border border-gray-600 rounded-md py-3 px-4 text-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors duration-300"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out">
+                                Submit
+                            </button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900/50 text-center py-6 text-gray-500">
-        <p>&copy; 2024 ABDUL RAFAY. All rights reserved.</p>
+    <footer class="bg-slate-900/80 text-center py-8 px-4 mt-8">
+        <div class="container mx-auto">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="https://www.linkedin.com/in/abdul-rafay-a82829377" target="_blank" aria-label="LinkedIn Profile" class="text-gray-400 hover:text-orange-500 transform hover:scale-125 transition-all duration-300"><i class="fab fa-linkedin-in text-2xl"></i></a>
+                <a href="https://github.com/mirzarafay333-png" target="_blank" aria-label="GitHub Profile" class="text-gray-400 hover:text-orange-500 transform hover:scale-125 transition-all duration-300"><i class="fab fa-github text-2xl"></i></a>
+            </div>
+            <p class="text-gray-500 text-sm">&copy; <span id="current-year"></span> ABDUL RAFAY. All rights reserved.</p>
+        </div>
     </footer>
 
-    <!-- JavaScript for animations and mobile menu -->
+    <!-- JavaScript for interactivity and animations -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Add the animation class
-                    this.classList.add('animate-nav-click');
-                    
-                    // Remove the class after a short delay to reset the animation
-                    setTimeout(() => {
-                        this.classList.remove('animate-nav-click');
-                    }, 400); // This duration should match the CSS animation duration
+        document.addEventListener("DOMContentLoaded", function() {
+            // Preloader fade-out
+            const preloader = document.getElementById('preloader');
+            preloader.classList.add('fade-out');
 
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                    
-                    // Close mobile menu after clicking a link
-                    const mobileMenu = document.getElementById('mobile-menu');
-                    const mobileMenuButtonIcon = document.querySelector('.mobile-menu-button-icon');
-                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                        mobileMenuButtonIcon.classList.remove('open');
-                    }
-                });
-            });
-
-            // Mobile menu toggle
+            // Mobile menu toggle functionality
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            const mobileMenuButtonIcon = document.querySelector('.mobile-menu-button-icon');
-            
+            const mobileMenuButtonIcon = mobileMenuButton.querySelector('.mobile-menu-button-icon');
+
             mobileMenuButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
                 mobileMenuButtonIcon.classList.toggle('open');
             });
 
-            // Enhanced animation on scroll
-            const animatedElements = document.querySelectorAll('.animated-element');
+            // Close mobile menu when a link is clicked
+            const mobileLinks = document.querySelectorAll('#mobile-menu a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuButtonIcon.classList.remove('open');
+                });
+            });
+
+            // Intersection Observer for scroll animations (now triggers on scroll up and down)
             const observerOptions = {
                 root: null,
                 rootMargin: '0px',
@@ -633,29 +517,120 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
-                        
-                        // If the element is a skill item, trigger the skill bar animation
-                        if (entry.target.id === 'skills') {
-                            animateSkillBars();
-                        }
-                        
-                        observer.unobserve(entry.target);
+                    } else {
+                        // Remove the class when it's not intersecting, allowing the animation to re-trigger
+                        entry.target.classList.remove('is-visible');
                     }
                 });
             }, observerOptions);
 
-            animatedElements.forEach(el => observer.observe(el));
-            
-            // Function to animate the skill bars
-            function animateSkillBars() {
-                const skillBars = document.querySelectorAll('#skills .skill-bar-fill');
-                skillBars.forEach(bar => {
-                    const width = bar.getAttribute('data-skill-width');
-                    if (width) {
-                        bar.style.width = width;
-                    }
+            // Observe all animated elements
+            document.querySelectorAll('.animated-element').forEach(element => {
+                observer.observe(element);
+            });
+
+            // Animation for navigation links
+            const navLinks = document.querySelectorAll('.nav-link, .nav-link-mobile');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    link.classList.add('animate-nav-click');
+                    setTimeout(() => {
+                        link.classList.remove('animate-nav-click');
+                    }, 400); // Match animation duration
                 });
+            });
+
+            // Set current year in the footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // --- Particle Background Animation ---
+
+            const canvas = document.getElementById('background-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let animationFrameId;
+
+            // Adjust canvas size and create particles on window resize
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                createParticles();
             }
+
+            // Define a Particle class
+            class Particle {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.radius = Math.random() * 2 + 1; // Random size
+                    this.color = 'rgba(255, 255, 255, 0.2)'; // White with transparency
+                    this.velocity = {
+                        x: (Math.random() - 0.5) * 0.5, // Slow horizontal movement
+                        y: (Math.random() - 0.5) * 0.5  // Slow vertical movement
+                    };
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+
+                update() {
+                    // Update particle position
+                    this.x += this.velocity.x;
+                    this.y += this.velocity.y;
+
+                    // Wrap particles around the screen
+                    if (this.x < 0 || this.x > canvas.width) this.velocity.x = -this.velocity.x;
+                    if (this.y < 0 || this.y > canvas.height) this.velocity.y = -this.velocity.y;
+                }
+            }
+
+            // Create particles
+            function createParticles() {
+                particles = []; // Clear existing particles
+                const particleCount = Math.floor((canvas.width * canvas.height) / 10000); // Scale particle count with screen size
+                for (let i = 0; i < particleCount; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    particles.push(new Particle(x, y));
+                }
+            }
+
+            // Draw lines between nearby particles
+            function drawLines() {
+                for (let a of particles) {
+                    for (let b of particles) {
+                        const distance = Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+                        if (distance < 120) { // Connect particles within 120px
+                            ctx.beginPath();
+                            ctx.moveTo(a.x, a.y);
+                            ctx.lineTo(b.x, b.y);
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / 120})`; // Fade out lines based on distance
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            // Animation loop
+            function animate() {
+                animationFrameId = requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+                drawLines(); // Draw connecting lines
+            }
+
+            // Event listeners
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas(); // Initial call
+            animate();
         });
     </script>
 </body>
